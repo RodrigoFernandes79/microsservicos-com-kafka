@@ -1,4 +1,4 @@
-package com.microsservices.pedido_ms.enums;
+package com.microsservices.pedido_ms.core.controller.enums;
 
 public enum StatusPedido {
     AGUARDANDO_PAGAMENTO,

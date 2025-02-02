@@ -1,4 +1,4 @@
-package com.microsservices.pedido_ms.exceptions;
+package com.microsservices.pedido_ms.config.exception;
 
 public class ProdutoNaoExisteNoEstoqueException extends RuntimeException {
 

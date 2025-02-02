@@ -1,6 +1,6 @@
-package com.microsservices.pedido_ms.exceptions.handlers;
+package com.microsservices.pedido_ms.config.exception.handlers;
 
-import com.microsservices.pedido_ms.exceptions.ProdutoNaoExisteNoEstoqueException;
+import com.microsservices.pedido_ms.config.exception.ProdutoNaoExisteNoEstoqueException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
