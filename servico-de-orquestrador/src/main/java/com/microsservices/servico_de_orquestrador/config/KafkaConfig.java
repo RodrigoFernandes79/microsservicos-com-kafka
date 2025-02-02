@@ -24,7 +24,7 @@ public class KafkaConfig {
     private final static Integer REPLICA_COUNT = 1;
 
     // Definição das propriedades do Kafka que serão injetadas via application.properties:
-    @Value("${spring.kafka.boostrap-servers}")
+    @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
     @Value("${spring.kafka.consumer.group-id}")
     private String groupId;
