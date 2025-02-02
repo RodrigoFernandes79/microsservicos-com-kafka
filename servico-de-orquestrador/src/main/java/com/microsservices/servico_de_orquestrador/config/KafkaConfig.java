@@ -1,5 +1,6 @@
 package com.microsservices.servico_de_orquestrador.config;
 
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -8,21 +9,30 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.microsservices.servico_de_orquestrador.core.enums.ETopics.*;
+
 @EnableKafka // Habilita o suporte ao Kafka dentro do Spring Boot
 @Configuration // Indica que essa classe é de configuração e será carregada pelo Spring
 public class KafkaConfig {
+    private final static Integer PARTITION_COUNT = 1;
+    private final static Integer REPLICA_COUNT = 1;
+
     // Definição das propriedades do Kafka que serão injetadas via application.properties:
     @Value("${spring.kafka.boostrap-servers}")
-    private final String bootstrapServers;
+    private String bootstrapServers;
     @Value("${spring.kafka.consumer.group-id}")
-    private final String groupId;
+    private String groupId;
     @Value("${spring.kafka.consumer.auto-offset-reset}")
-    private final String autoOffsetReset;
+    private String autoOffsetReset;
+
+    public KafkaConfig() {
+    }
 
     /**
      * Construtor da classe.
@@ -83,6 +93,69 @@ public class KafkaConfig {
     @Bean
     public KafkaTemplate<String, String> kafkaTemplate(ProducerFactory<String, String> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
+    }
+
+    private NewTopic buildTopic(String name) {
+        return TopicBuilder
+                .name(name)
+                .replicas(REPLICA_COUNT)
+                .partitions(PARTITION_COUNT)
+                .build();
+    }
+
+    @Bean
+    public NewTopic startSagaTopic() {
+        return buildTopic(START_SAGA.getTopic());
+    }
+
+    @Bean
+    public NewTopic orchestratorTopic() {
+        return buildTopic(BASE_ORCHESTRATOR.getTopic());
+    }
+
+    @Bean
+    public NewTopic finishFailTopic() {
+        return buildTopic(FINISH_FAIL.getTopic());
+    }
+
+    @Bean
+    public NewTopic finishSucessTopic() {
+        return buildTopic(FINISH_SUCESS.getTopic());
+    }
+
+    @Bean
+    public NewTopic pagamentoSucessTopic() {
+        return buildTopic(PAGAMENTO_SUCESS.getTopic());
+    }
+
+    @Bean
+    public NewTopic pagamentoFailTopic() {
+        return buildTopic(PAGAMENTO_FAIL.getTopic());
+    }
+
+    @Bean
+    public NewTopic estoqueSucessTopic() {
+        return buildTopic(ESTOQUE_SUCESS.getTopic());
+    }
+
+    @Bean
+    public NewTopic estoqueFailTopic() {
+        return buildTopic(ESTOQUE_FAIL.getTopic());
+    }
+
+    @Bean
+    public NewTopic produtoSucessTopic() {
+        return buildTopic(PRODUTO_SUCESS.getTopic());
+    }
+
+    @Bean
+    public NewTopic produtoFailTopic() {
+        return buildTopic(PRODUTO_FAIL.getTopic());
+    }
+
+    @Bean
+    public NewTopic notifyEndingTopic() {
+        return buildTopic(NOTIFY_ENDING.getTopic());
     }
 }
 

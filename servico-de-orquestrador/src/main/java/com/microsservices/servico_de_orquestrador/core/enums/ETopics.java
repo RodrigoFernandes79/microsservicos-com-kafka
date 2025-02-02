@@ -1,7 +1,10 @@
+package com.microsservices.servico_de_orquestrador.core.enums;
+
 public enum ETopics {
     //mapeando todos os topicos dos microsservicos no orquestrador
     START_SAGA("start-saga"),
     BASE_ORCHESTRATOR("orchestrator"),
+    FINISH_SUCESS("finish-sucess"),
     FINISH_FAIL("finish-fail"),
     PAGAMENTO_SUCESS("pagamento-sucess"),
     PAGAMENTO_FAIL("pagamento-fail"),
