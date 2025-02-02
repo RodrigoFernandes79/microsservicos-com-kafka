@@ -94,6 +94,86 @@ services:
     depends_on:
       - "kafka"
 
+  pedido-ms:
+    build: './pedido-ms'
+    container_name: pedido-ms
+    depends_on:
+      - mongo
+      - kafka
+    networks:
+      - orchestrator-saga
+    environment:
+      - KAFKA_BROKER=kafka:29092
+      - MONGO_DB_URI
+    ports:
+      - 3000:3000
+
+  servico-de-orquestrador:
+    build: './servico-de-orquestrador'
+    container_name: servico-de-orquestrador
+    depends_on:
+      - kafka
+    networks:
+      - orchestrator-saga
+    environment:
+      - KAFKA_BROKER=kafka:29092
+    ports:
+      - 8880:8880
+
+  produto-validacao-ms:
+    build: './produto-validacao_ms'
+    container_name: produto-validacao-ms
+    depends_on:
+      - produto-db
+      - kafka
+    networks:
+      - orchestrator-saga
+    environment:
+      - KAFKA_BROKER=kafka:29092
+      - HOST_DB=produto-db
+      - DB_NAME=produto-db
+      - DB_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - 8090:8090
+
+  pagamento-ms:
+    build: './pagamento_ms'
+    container_name: pagamento-ms
+    depends_on:
+      - pagamento-db
+      - kafka
+    networks:
+      - orchestrator-saga
+    environment:
+      - KAFKA_BROKER=kafka:29092
+      - HOST_DB=pagamento-db
+      - DB_NAME=pagamento-db
+      - DB_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - 8091:8091
+
+  estoque-ms:
+    build: './estoque_ms'
+    container_name: estoque-ms
+    depends_on:
+      - estoque-db
+      - kafka
+    networks:
+      - orchestrator-saga
+    environment:
+      - KAFKA_BROKER=kafka:29092
+      - HOST_DB=estoque-db
+      - DB_NAME=estoque-db
+      - DB_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - 8092:8092
+
 networks:
   orchestrator-saga:
     driver: bridge
